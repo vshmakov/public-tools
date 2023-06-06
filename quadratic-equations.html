@@ -63,6 +63,10 @@
 
         getResult(a, b, c) {
             if (a == 0) {
+                if (b==0){
+                    return  ['Нет ответа']
+                }
+
                 return [
                     `x=${-c / b}`
                 ]
