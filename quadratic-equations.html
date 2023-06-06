@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Квадратные уравнения</title>
+</head>
+<body>
+<h2>Введите коэффициенты</h2>
+<form id="form">
+
+    <div>
+        <h6>a</h6>
+        <input type="text" value="1" id="a" required>
+    </div>
+    <div>
+        <h6>b</h6>
+        <input type="text" id="b" required>
+    </div>
+    <div>
+        <h6>c</h6>
+        <input type="text" id="c" required>
+    </div>
+    <div>
+        <button type="submit">
+            Посчитать
+        </button>
+    </div>
+</form>
+<div id="result"></div>
+
+<script src="./js/LocalStorageInput.js"></script>
+<script>
+    const prefix = 'quadratic-equations.html'
+
+    new class {
+        a = new LocalStorageInput(prefix, 'a')
+        b = new LocalStorageInput(prefix, 'b')
+        c = new LocalStorageInput(prefix, 'c')
+        $form = document.getElementById('form')
+        $result = document.getElementById('result')
+
+        constructor() {
+            if (!this.a.$element.value) {
+                this.a.setValue(1)
+            }
+
+            this.$form.onsubmit = (event) => {
+                event.preventDefault()
+                this.calculate()
+            }
+        }
+
+        calculate() {
+            const a = +this.a.$element.value
+            const b = +this.b.$element.value
+            const c = +this.c.$element.value
+            this.$result.innerHTML = this.getResult(a, b, c)
+                .join('<br>')
+        }
+
+        getResult(a, b, c) {
+            const d = b ** 2 - 4 * a * c
+            const parts = [
+                `D=${d}`
+            ]
+
+            if (d < 0) {
+                return parts
+            }
+
+            if (d === 0) {
+                parts.push(`x=${-b / 2 / a}`)
+
+                return parts
+            }
+
+            const d2 = d ** 0.5
+            const x1 = this.round((-b + d2) / 2 / a)
+            parts.push(`x1=${x1}`)
+            const x2 = this.round((-b - d2) / 2 / a)
+            parts.push(`x2=${x2}`)
+
+            return parts
+        }
+
+        round(n) {
+            const k = 10 ** 3
+
+            return Math.round(n * k) / k
+        }
+    }
+</script>
+</body>
+</html>
