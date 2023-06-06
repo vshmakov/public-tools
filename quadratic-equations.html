@@ -33,7 +33,7 @@
 
 <script src="./js/LocalStorageInput.js"></script>
 <script>
-    const prefix = 'quadratic-equations.html'
+    const prefix = 'quadratic-equations'
 
     new class {
         a = new LocalStorageInput(prefix, 'a')
@@ -71,25 +71,26 @@
                 return parts
             }
 
+            const d2 = d ** 0.5
+            const x1 = this.round((-b + d2) / 2 / a)
+
             if (d === 0) {
-                parts.push(`x=${-b / 2 / a}`)
+                parts.push(`x=${x1}`)
 
                 return parts
             }
 
-            const d2 = d ** 0.5
-            const x1 = this.round((-b + d2) / 2 / a)
-            parts.push(`x1=${x1}`)
+                        parts.push(`x1=${x1}`)
             const x2 = this.round((-b - d2) / 2 / a)
             parts.push(`x2=${x2}`)
 
             return parts
         }
 
-        round(n) {
+        round(number) {
             const k = 10 ** 3
 
-            return Math.round(n * k) / k
+            return Math.round(number * k) / k
         }
     }
 </script>
