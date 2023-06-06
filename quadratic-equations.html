@@ -62,6 +62,12 @@
         }
 
         getResult(a, b, c) {
+            if (a == 0) {
+                return [
+                    `x=${-c / b}`
+                ]
+            }
+
             const d = b ** 2 - 4 * a * c
             const parts = [
                 `D=${d}`
@@ -80,7 +86,7 @@
                 return parts
             }
 
-                        parts.push(`x1=${x1}`)
+            parts.push(`x1=${x1}`)
             const x2 = this.round((-b - d2) / 2 / a)
             parts.push(`x2=${x2}`)
 
