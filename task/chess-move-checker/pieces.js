@@ -10,7 +10,7 @@ class Piece {
 
 class Pawn extends Piece {
     constructor(color) {
-super();
+        super();
         this.color = color; // 'white' или 'black'
     }
 
@@ -19,6 +19,11 @@ super();
     }
 
     canMove(move) {
+        const fromRankIndex = move.from.rankIndex;
+
+        // Пешка не может находиться на первой и последней горизонтали:
+        if (fromRankIndex === 0 || fromRankIndex === 7) return false;
+
         const {fileDelta, rankDelta} = move;
 
         // Пешка ходит только прямо по колонке:
@@ -27,14 +32,14 @@ super();
         // Определяем направление движения по вертикали в зависимости от цвета:
         const rankDirection = this.color === 'white' ? 1 : -1;
 
-        // Определяем стартовую горизонталь для двойного шага:
-        const rankStart = this.color === 'white' ? 1 : 6;
-
         // Обычный шаг вперёд на 1 клетку
         if (rankDelta === rankDirection) return true;
 
+        // Определяем стартовую горизонталь для двойного шага:
+        const rankStart = this.color === 'white' ? 1 : 6;
+
         // Двойной ход с начальной позиции
-        if (rankDelta === 2 * rankDirection && move.from.rankIndex === rankStart) return true;
+        if (rankDelta === 2 * rankDirection && fromRankIndex === rankStart) return true;
 
         // Все остальные варианты (например, слишком большой шаг или шаг назад)
         return false;
