@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Решить шараду</title>
+</head>
+<body>
+<h2>Шарада</h2>
+<form id="form">
+    <input type="text" value="1" id="input" required>
+    <button type="submit">Решить</button>
+</form>
+<div id="result"></div>
+
+<script src="./js/LocalStorageInput.js"></script>
+<script>
+    const prefix = 'charades'
+
+    class CharadeExpression {
+        expresssion
+
+        constructor(expresssion) {
+            this.expresssion = expresssion;
+        }
+
+        isValidWith(values) {
+
+        }
+
+        evaluateWith(values) {
+            try {
+                return Function(`'use strict'; return (${this.fillIn(values)})`)()
+            } catch (e) {
+                return null
+            }
+        }
+
+        fillIn(values) {
+            let expression = this.expresssion
+
+
+            for (const number in values) {
+                expression = expression.replace(new RegExp(number, "gu"), values[number])
+            }
+
+            return expression
+        }
+    }
+
+    function* valuesMaker(numbers) {
+        for (let i = 0; i < 10 ** numbers.length; i++) {
+            yield  mapValuesToNumbers(numbers, i)
+        }
+    }
+
+    function mapValuesToNumbers(numbers, value) {
+        const values = getValuesForAllNumbers(value, numbers.length)
+        const map = {}
+
+        for (let i = 0; i < numbers.length; i++) {
+            map[numbers[i]] = values[i]
+        }
+
+        return map
+    }
+
+    function getValuesForAllNumbers(value, numbersCount) {
+        let string = value.toString()
+
+        while (string.length < numbersCount) {
+            string = `0${string}`
+        }
+
+        return string.split('')
+            .map(x => +x)
+    }
+
+    new class {
+        input = new LocalStorageInput(prefix, 'input')
+        $form = document.getElementById('form')
+        $result = document.getElementById('result')
+
+        constructor() {
+            this.$form.onsubmit = (event) => {
+                event.preventDefault()
+                this.calculate()
+            }
+        }
+
+        calculate() {
+            this.$result.innerHTML = 'Решаем...'
+            const input = this.input
+                .$element
+                .value
+                .toLowerCase()
+            this.$result.innerHTML = this.getResult(input)
+                .join('<br>')
+        }
+
+        getResult(input) {
+            const expressions = input.split('=')
+                .filter(x => !!x)
+                .map(x => new CharadeExpression(x))
+
+            if (expressions.length !== 2) {
+                return ['Неверное выражение']
+            }
+
+            const chars = input.split('')
+            const numbers = this.getNumbers(chars)
+            const results = []
+
+            for (const values of valuesMaker(numbers)) {
+                const result = expressions[0].evaluateWith(values)
+
+                if (result !== null && result === expressions[1].evaluateWith(values)) {
+                    results.push(
+                        expressions.map(x => x.fillIn(values))
+                            .join('=')
+                    )
+                }
+            }
+
+            if (results.length === 0) {
+                return ['Результат не найден']
+            }
+
+            return results
+        }
+
+        getNumbers(chars) {
+            const numbers = []
+
+            for (const char of chars) {
+                if (
+                    !numbers.includes(char)
+                    && !['+', '-', '*', '/', '='].includes(char)
+                    && (+char).toString() !== char
+                ) {
+                    numbers.push(char)
+                }
+            }
+
+            return numbers
+        }
+    }
+</script>
+</body>
+</html>

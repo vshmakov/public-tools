@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Проверка шахматного хода</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        input {
+            width: 80px;
+            padding: 5px;
+            margin: 5px 0;
+            text-transform: Lowercase;
+        }
+        button {
+            padding: 6px 12px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            min-height: 40px;
+        }
+    </style>
+</head>
+<body>
+<form class="container" onsubmit="checkMove(); return false;">
+    <h1>Проверка шахматного хода</h1>
+    <label>Клетка А: <input type="text" id="cellA" maxlength="2" placeholder="e2"></label><br>
+    <label>Клетка B: <input type="text" id="cellB" maxlength="2" placeholder="e4"></label><br>
+    <button type="submit">Проверить</button>
+    <div id="result"></div>
+</form>
+
+<script src="pieces.js"></script>
+<script src="index.js"></script>
+</body>
+</html>
