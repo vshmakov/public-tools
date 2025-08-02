@@ -39,7 +39,6 @@ function checkMove() {
         : 'Ни одна фигура не может сходить так';
 }
 
-
 function getMovablePieces(start, end) {
     const pieces = [
         Pawn.createSafe(start, 'white'),

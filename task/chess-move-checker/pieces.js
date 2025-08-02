@@ -88,7 +88,7 @@ class Bishop extends Piece {
         if (!super.canMove(end)) return false;
 
         const [dx, dy] = this.diff(end);
-        return dx === dy && dx > 0;
+        return dx === dy;
     }
 }
 
@@ -101,7 +101,7 @@ class Rook extends Piece {
         if (!super.canMove(end)) return false;
 
         const [dx, dy] = this.diff(end);
-        return (dx === 0 && dy > 0) || (dy === 0 && dx > 0);
+        return dx === 0 || dy === 0;
     }
 }
 
@@ -114,7 +114,7 @@ class Queen extends Piece {
         if (!super.canMove(end)) return false;
 
         const [dx, dy] = this.diff(end);
-        return (dx === dy && dx > 0) || dx === 0 || dy === 0;
+        return dx === dy || dx === 0 || dy === 0;
     }
 }
 
