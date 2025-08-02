@@ -13,7 +13,11 @@ class Piece {
 
     canMove(end) {
         // Базовая проверка: не стоять на месте
-        return !(this.start[0] === end[0] && this.start[1] === end[1]);
+        return !(this.start[0] === end[0] && this.start[1] === end[1]) && this.canMoveToAnotherSquare(end);
+    }
+
+    canMoveToAnotherSquare(end) {
+        return false;
     }
 }
 
@@ -40,29 +44,26 @@ class Pawn extends Piece {
         return (this.color === 'white' ? 'Белая' : 'Чёрная') + ' пешка';
     }
 
-    canMove(end) {
-        //   - Клетка назначения не совпадает со стартовой.
-        if (!super.canMove(end)) return false;
-
+    canMoveToAnotherSquare(end) {
         const [dx, dy, sx, sy] = this.diff(end);
 
         // Определяем направление движения по вертикали в зависимости от цвета:
         const yDirection = this.color === 'white' ? 1 : -1;
 
         // Определяем стартовую горизонталь для двойного шага:
-                const yStart = this.color === 'white' ? 1 : 6;
+        const yStart = this.color === 'white' ? 1 : 6;
 
         // 5️⃣ Пешка ходит только прямо по колонке:
         if (dx !== 0) return false;
 
         // 6️⃣ Обычный шаг вперёд на 1 клетку
-                if (sy === yDirection) return true;
+        if (sy === yDirection) return true;
 
         // Двойной ход с начальной позиции
-                if (sy === 2 * yDirection && this.start[1] === yStart) return true;
+        if (sy === 2 * yDirection && this.start[1] === yStart) return true;
 
         // Все остальные варианты (например, слишком большой шаг или шаг назад)
-                return false;
+        return false;
     }
 }
 
@@ -71,9 +72,7 @@ class Knight extends Piece {
         return 'Конь';
     }
 
-    canMove(end) {
-        if (!super.canMove(end)) return false;
-
+    canMoveToAnotherSquare(end) {
         const [dx, dy] = this.diff(end);
         return (dx === 2 && dy === 1) || (dx === 1 && dy === 2);
     }
@@ -84,9 +83,7 @@ class Bishop extends Piece {
         return 'Слон';
     }
 
-    canMove(end) {
-        if (!super.canMove(end)) return false;
-
+    canMoveToAnotherSquare(end) {
         const [dx, dy] = this.diff(end);
         return dx === dy;
     }
@@ -97,9 +94,7 @@ class Rook extends Piece {
         return 'Ладья';
     }
 
-    canMove(end) {
-        if (!super.canMove(end)) return false;
-
+    canMoveToAnotherSquare(end) {
         const [dx, dy] = this.diff(end);
         return dx === 0 || dy === 0;
     }
@@ -110,9 +105,7 @@ class Queen extends Piece {
         return 'Ферзь';
     }
 
-    canMove(end) {
-        if (!super.canMove(end)) return false;
-
+    canMoveToAnotherSquare(end) {
         const [dx, dy] = this.diff(end);
         return dx === dy || dx === 0 || dy === 0;
     }
@@ -123,9 +116,7 @@ class King extends Piece {
         return 'Король';
     }
 
-    canMove(end) {
-        if (!super.canMove(end)) return false;
-
+    canMoveToAnotherSquare(end) {
         const [dx, dy] = this.diff(end);
         return dx <= 1 && dy <= 1;
     }
