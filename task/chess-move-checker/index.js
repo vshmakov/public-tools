@@ -32,9 +32,10 @@ function checkMove() {
         resultDiv.textContent = 'Введите корректные клетки, например: e2 и e4';
         return;
     }
+
     const pieces = getMovablePieces(start, end);
 
-    resultDiv.textContent = pieces.length
+    resultDiv.textContent = pieces.length !== 0
         ? 'Могут пойти: ' + pieces.join(', ')
         : 'Ни одна фигура не может сходить так';
 }
